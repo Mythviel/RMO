@@ -1,0 +1,183 @@
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-sans, sans-serif); background: transparent; }
+  .container { padding: 16px 0; max-width: 100%; }
+  .main-title { font-size: 18px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 4px; }
+  .subtitle { font-size: 13px; color: var(--color-text-secondary); margin-bottom: 16px; }
+  .search-bar { width: 100%; padding: 8px 12px; border: 1px solid var(--color-border-primary); border-radius: var(--border-radius-md); background: var(--color-background-secondary); color: var(--color-text-primary); font-size: 14px; margin-bottom: 12px; outline: none; }
+  .search-bar:focus { border-color: var(--color-border-secondary); }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead tr { background: var(--color-background-secondary); }
+  th { padding: 10px 12px; text-align: left; font-weight: 500; color: var(--color-text-secondary); font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--color-border-tertiary); }
+  td { padding: 9px 12px; vertical-align: top; border-bottom: 1px solid var(--color-border-tertiary); color: var(--color-text-primary); line-height: 1.5; }
+  tr:last-child td { border-bottom: none; }
+  .main-topic { font-weight: 500; color: var(--color-text-primary); font-size: 13px; }
+  .subtopic { font-weight: 500; color: var(--color-text-primary); font-size: 13px; }
+  .sub-sub { color: var(--color-text-secondary); font-size: 12.5px; }
+  .deep { color: var(--color-text-tertiary); font-size: 12px; }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 500; white-space: nowrap; }
+  .badge-core { background: #E6F1FB; color: #0C447C; }
+  .badge-adv  { background: #FAECE7; color: #712B13; }
+  .badge-ext  { background: #FAEEDA; color: #633806; }
+  tr.topic-row-a td { background: var(--color-background-primary); }
+  tr.topic-row-b td { background: var(--color-background-secondary); }
+  tr.hidden { display: none; }
+  .tag-col { min-width: 70px; }
+  .num-col { width: 32px; color: var(--color-text-tertiary); font-size: 12px; text-align: right; padding-right: 8px; }
+</style>
+<div class="container">
+  <div class="main-title">Number Theory for RMO — Complete Topic Map</div>
+  <div class="subtitle">Every topic, subtopic, and sub-subtopic needed to score maximum marks &nbsp;·&nbsp; <span style="color:#0C447C">■</span> Core &nbsp;<span style="color:#712B13">■</span> Advanced &nbsp;<span style="color:#633806">■</span> Extended</div>
+  <input class="search-bar" type="text" placeholder="Search any topic, subtopic, or concept..." oninput="filterTable(this.value)" />
+  <table id="nt-table">
+    <thead>
+      <tr>
+        <th class="num-col">#</th>
+        <th style="width:18%">Main Topic</th>
+        <th style="width:20%">Subtopic</th>
+        <th style="width:32%">Sub-subtopics</th>
+        <th>Deep Sub-sub-subtopics / Key Concepts</th>
+        <th class="tag-col">Level</th>
+      </tr>
+    </thead>
+    <tbody id="table-body"></tbody>
+  </table>
+</div>
+<script>
+const data = [
+  // ── 1. DIVISIBILITY ──
+  ["Divisibility & Division Algorithm","Division Algorithm","Euclidean division: a = bq + r, 0 ≤ r < b","Uniqueness of quotient & remainder; dividend, divisor, quotient, remainder definitions; Division with negative integers","Core"],
+  ["Divisibility & Division Algorithm","Divisibility Basics","a∣b notation; divisibility rules for 2,3,4,5,6,7,8,9,10,11","Proof of divisibility rules; divisibility rules for 13, 17, 19; divisibility in different bases","Core"],
+  ["Divisibility & Division Algorithm","Properties of Divisibility","Transitivity; linearity (a∣b, a∣c ⟹ a∣mb+nc); divisibility and inequalities","If a∣b and b∣a then a = ±b; greatest divisor arguments; divisibility chains","Core"],
+  ["Divisibility & Division Algorithm","GCD (Greatest Common Divisor)","Definition; gcd(a,b) = gcd(b, a mod b); gcd(a,0) = a","gcd of more than two numbers; gcd and linear combinations; gcd properties: gcd(ka,kb)=k·gcd(a,b)","Core"],
+  ["Divisibility & Division Algorithm","Euclidean Algorithm","Step-by-step application; time complexity O(log min(a,b))","Extended Euclidean Algorithm; back-substitution to find Bézout coefficients; binary GCD algorithm","Core"],
+  ["Divisibility & Division Algorithm","LCM (Least Common Multiple)","lcm(a,b) = ab/gcd(a,b); lcm of multiple numbers","lcm via prime factorisation; lcm and divisibility conditions; lcm in competition problems","Core"],
+  ["Divisibility & Division Algorithm","Bézout's Identity","∃ x,y: ax+by = gcd(a,b); integer linear combinations","All solutions of ax+by=c when gcd(a,b)∣c; parametric solution family; geometric interpretation","Core"],
+  ["Divisibility & Division Algorithm","Floor & Ceiling Functions","⌊x⌋ and ⌈x⌉ definitions; fractional part {x}","⌊x⌋ + ⌊x+½⌋ = ⌊2x⌋; ⌊x⌋ + ⌈x⌉ formulas; Hermite's identity; floor in divisibility counting","Advanced"],
+
+
+  // ── 2. PRIMES ──
+  ["Prime Numbers","Definitions","Prime vs composite; 1 is neither; smallest prime is 2","Infinitude of primes (Euclid's proof); density of primes; Bertrand's Postulate","Core"],
+  ["Prime Numbers","Fundamental Theorem of Arithmetic","Unique prime factorisation: n = p₁^a₁·…·pₖ^aₖ","Existence proof; uniqueness proof; canonical form; applications to gcd and lcm","Core"],
+  ["Prime Numbers","Prime Factorisation Techniques","Trial division; factor trees; recognising perfect squares/cubes from factorisation","Factoring large numbers in competition; prime factorisation to count divisors; expressing n! in primes","Core"],
+  ["Prime Numbers","Number of Divisors τ(n)","τ(p₁^a₁…pₖ^aₖ) = (a₁+1)…(aₖ+1)","Divisors of perfect squares (odd count); finding n with exactly k divisors; min n with τ(n)=k","Core"],
+  ["Prime Numbers","Sum of Divisors σ(n)","σ(n) = Π (pᵢ^(aᵢ+1)−1)/(pᵢ−1); multiplicativity","Perfect numbers (σ(n)=2n); abundant, deficient numbers; even perfect numbers and Mersenne primes","Advanced"],
+  ["Prime Numbers","Special Primes","Mersenne primes (2^p−1); Fermat primes (2^(2^n)+1)","Twin primes; Sophie Germain primes; safe primes; prime gaps","Advanced"],
+  ["Prime Numbers","Primality Tests","Trial division; Wilson's theorem test (n prime ⟺ (n−1)!≡−1 mod n)","Sieve of Eratosthenes; Sieve of Sundaram; segmented sieve; Miller–Rabin (conceptual)","Core"],
+  ["Prime Numbers","Distribution of Primes","Prime counting function π(x); Bertrand's Postulate: ∃ prime in (n,2n)","Chebyshev's theorem; applications of Bertrand in competition; gaps between primes","Advanced"],
+  ["Prime Numbers","Primes in Arithmetic Progressions","Dirichlet's theorem (statement): primes in a, a+d, a+2d,… when gcd(a,d)=1","Infinitely many primes of form 4k+1, 4k+3; primes of form 6k±1","Advanced"],
+
+
+  // ── 3. MODULAR ARITHMETIC ──
+  ["Modular Arithmetic","Congruence Basics","a ≡ b (mod m) iff m∣(a−b); reflexive, symmetric, transitive","Residue classes; complete residue system; reduced residue system; addition and subtraction of congruences","Core"],
+  ["Modular Arithmetic","Arithmetic Operations mod m","Addition, subtraction, multiplication of congruences; (a+b) mod m; (ab) mod m","Division by d when gcd(d,m)=1; cancellation law; why you cannot always divide","Core"],
+  ["Modular Arithmetic","Powers mod m","Repeated squaring (fast exponentiation); a^k mod m","Pattern of last digits; period of powers; reducing large exponents","Core"],
+  ["Modular Arithmetic","Residues and Remainders","Least non-negative residue; absolute least residue; choosing convenient residue","CRT residues; sum of residues; residues in olympiad inequalities","Core"],
+  ["Modular Arithmetic","Inverses mod m","Multiplicative inverse: a·a⁻¹ ≡ 1 (mod m) exists iff gcd(a,m)=1","Finding inverse via Extended Euclidean; inverse via Euler's theorem; tables of inverses for small m","Core"],
+  ["Modular Arithmetic","Fermat's Little Theorem","p prime, gcd(a,p)=1 ⟹ a^(p−1) ≡ 1 (mod p); a^p ≡ a (mod p)","Proof via necklaces/group theory (conceptual); applications: computing a^n mod p; Fermat pseudo-primes","Core"],
+  ["Modular Arithmetic","Euler's Theorem","a^φ(n) ≡ 1 (mod n) when gcd(a,n)=1","Proof sketch; reduction of exponents mod φ(n); Euler's theorem for composite moduli","Core"],
+  ["Modular Arithmetic","Euler's Totient Function φ(n)","φ(n) = n·Π(1−1/pᵢ); φ(p)=p−1; φ(p^k)=p^k−p^(k−1)","φ(mn)=φ(m)φ(n) when gcd(m,n)=1; Σ_{d|n} φ(d) = n; φ(n) is even for n>2","Core"],
+  ["Modular Arithmetic","Wilson's Theorem","(p−1)! ≡ −1 (mod p) iff p is prime","Proof; converse (Wilson's theorem characterises primes); Wilson quotients; applications in competition","Core"],
+  ["Modular Arithmetic","Chinese Remainder Theorem","System x≡aᵢ (mod mᵢ), mᵢ pairwise coprime has unique solution mod M=∏mᵢ","Constructive proof; non-coprime moduli; CRT in prime factorisation; applications to last two digits","Core"],
+  ["Modular Arithmetic","Linear Congruences","ax ≡ b (mod m): solvable iff gcd(a,m)∣b; # solutions = gcd(a,m)","Algorithm to solve; parametric family of solutions; reduction to coprime case","Core"],
+  ["Modular Arithmetic","Systems of Congruences","Simultaneous linear congruences; iterative substitution; matrix method (conceptual)","Incompatible systems; Chinese Remainder as special case; overlapping moduli","Core"],
+  ["Modular Arithmetic","Quadratic Residues","a is QR mod p if x²≡a (mod p) has solution; a is QNR otherwise","Legendre symbol (a/p); exactly (p−1)/2 QRs and QNRs mod prime p; −1 is QR iff p≡1 (mod 4)","Advanced"],
+  ["Modular Arithmetic","Legendre & Jacobi Symbols","(a/p) = a^((p−1)/2) mod p; multiplicativity","Euler's criterion; Jacobi symbol generalisation; computation rules","Advanced"],
+  ["Modular Arithmetic","Quadratic Reciprocity","(p/q)(q/p) = (−1)^{(p−1)/2·(q−1)/2} for odd primes p≠q","Proof strategies (conceptual); first and second supplements (−1/p) and (2/p); applications","Advanced"],
+
+
+  // ── 4. DIOPHANTINE EQUATIONS ──
+  ["Diophantine Equations","Linear Diophantine (2 vars)","ax+by=c; solvable iff gcd(a,b)∣c; general solution","Counting solutions in a range; positive solutions; non-negative solutions; Chicken McNugget theorem","Core"],
+  ["Diophantine Equations","Pythagorean Triples","x²+y²=z²; primitive triples: x=m²−n², y=2mn, z=m²+n²","Conditions on m,n (coprime, opposite parity); all triples from primitives; geometric interpretation","Core"],
+  ["Diophantine Equations","Pell's Equation","x²−Dy²=1; fundamental solution; infinite family","Continued fraction method to find fundamental solution; x²−2y²=1; x²−3y²=1; negative Pell","Advanced"],
+  ["Diophantine Equations","Mordell's Equation","y²=x³+k; finite/infinite solutions depending on k","Cases k=−2,−1,1,2; descent arguments; heights (conceptual)","Extended"],
+  ["Diophantine Equations","Sum of Squares","Which n = a²+b²? (n iff no prime p≡3 mod 4 appears to odd power)","Gaussian integers approach (conceptual); four-square theorem (Lagrange); sum of three squares","Advanced"],
+  ["Diophantine Equations","Fermat's Last Theorem","x^n+y^n=z^n no positive integer solutions for n≥3 (state only)","Cases n=3,4 accessible in olympiad; infinite descent for n=4; Pythagorean analogy","Advanced"],
+  ["Diophantine Equations","Modular Arithmetic as Tool","Proving no solutions by finding contradictory residue mod m","Choosing the right modulus; mod 4, mod 8, mod 3 arguments; infinite descent","Core"],
+  ["Diophantine Equations","Infinite Descent","Assume smallest solution, derive smaller — contradiction","Fermat's method; examples: √2 irrational, n²+n odd impossible; competition application","Core"],
+  ["Diophantine Equations","Exponential Diophantine","a^x = b^y + c type; equations involving factorials","n! + 1 = m² (Brocard's problem); 2^a − 2^b = n!; lifting-the-exponent approach","Advanced"],
+
+
+  // ── 5. NUMBER THEORETIC FUNCTIONS ──
+  ["Number-Theoretic Functions","Multiplicative Functions","f(mn)=f(m)f(n) for gcd(m,n)=1; completely multiplicative","τ, σ, φ, μ are multiplicative; products of multiplicative functions; Dirichlet convolution","Advanced"],
+  ["Number-Theoretic Functions","Möbius Function μ(n)","μ(1)=1; μ(n)=0 if p²∣n; μ(n)=(−1)^k if n=p₁…pₖ","Möbius Inversion Formula: g=f*1 ⟺ f=g*μ; inclusion-exclusion connection; μ in counting coprime pairs","Advanced"],
+  ["Number-Theoretic Functions","Mangoldt Function Λ(n)","Λ(n)=log p if n=p^k else 0","Connection to prime counting; von Mangoldt in analytic NT (conceptual only)","Extended"],
+  ["Number-Theoretic Functions","Arithmetic Mean of Divisors","(1/n)Σ_{d|n} d = σ(n)/n; abundancy index","Perfect, abundant, deficient classification; quasiperfect, multiply perfect (conceptual)","Advanced"],
+  ["Number-Theoretic Functions","Dirichlet Convolution","(f*g)(n) = Σ_{d|n} f(d)g(n/d)","τ = 1*1; σ = id*1; φ = μ*id; inversion via μ; convolution ring structure","Extended"],
+
+
+  // ── 6. LEGENDRE'S FORMULA & FACTORIALS ──
+  ["Factorials & Legendre","Legendre's Formula","v_p(n!) = Σ_{k≥1} ⌊n/p^k⌋ = (n−s_p(n))/(p−1)","Proof via counting multiples; trailing zeros in n! (p=2,5); zeros in base b","Core"],
+  ["Factorials & Legendre","Kummer's Theorem","v_p(C(m+n,m)) = number of carries when adding m and n in base p","Applications to divisibility of binomial coefficients; C(2n,n) divisibility","Advanced"],
+  ["Factorials & Legendre","Binomial Coefficients Mod p","Lucas' Theorem: C(m,n) ≡ Π C(mᵢ,nᵢ) (mod p) where mᵢ are base-p digits","Conditions for p∤C(m,n); Pascal's triangle mod p; Sierpiński triangle pattern","Advanced"],
+  ["Factorials & Legendre","n! and Primorial","n# = product of primes ≤ n; n! and its prime factorisation","Estimating n! via Stirling (conceptual); exact prime factorisation in competition","Core"],
+
+
+  // ── 7. ORDER & PRIMITIVE ROOTS ──
+  ["Orders & Primitive Roots","Order of an Element","ord_m(a) = smallest k>0: a^k≡1 (mod m); order divides φ(m)","Order divides any exponent giving 1; order of a^j is ord/(gcd(j,ord)); order computation","Advanced"],
+  ["Orders & Primitive Roots","Primitive Roots","g is primitive root mod m if ord_m(g)=φ(m); g generates all coprime residues","Existence: primitive roots exist mod 1,2,4,p^k,2p^k; not mod 8,15,…; number of primitive roots = φ(φ(m))","Advanced"],
+  ["Orders & Primitive Roots","Discrete Logarithm","log_g(a) mod m: solve g^x ≡ a (mod m)","Index arithmetic; baby-step giant-step (conceptual); competition use: converting multiplication to addition","Advanced"],
+  ["Orders & Primitive Roots","Lifting the Exponent (LTE)","v_p(a^n−b^n): LTE lemma for odd p; LTE for p=2","Conditions; proof for odd p; competition applications; LTE in exponential Diophantine","Advanced"],
+
+
+  // ── 8. CONTINUED FRACTIONS ──
+  ["Continued Fractions","Simple Continued Fractions","a₀+1/(a₁+1/(a₂+…)); notation [a₀;a₁,a₂,…]","Finite CF for rationals; infinite periodic CF for quadratic irrationals; uniqueness","Advanced"],
+  ["Continued Fractions","Convergents","pₙ/qₙ; recurrence pₙ=aₙpₙ₋₁+pₙ₋₂; qₙ=aₙqₙ₋₁+qₙ₋₂","Best rational approximations; |α−pₙ/qₙ| < 1/qₙ²; alternating over/under approximation","Advanced"],
+  ["Continued Fractions","CF and Pell's Equation","Fundamental solution from periodic CF of √D","Period length; convergents give all solutions; √2=[1;2,2,…], √3=[1;1,2,1,2,…]","Advanced"],
+  ["Continued Fractions","Diophantine Approximation","Dirichlet's theorem: ∃p/q with |α−p/q|<1/q²","Hurwitz's theorem (constant 1/√5); Liouville numbers; transcendence intro (conceptual)","Extended"],
+
+
+  // ── 9. COMBINATORIAL NUMBER THEORY ──
+  ["Combinatorial Number Theory","Pigeonhole in NT","Pigeonhole applied to remainders; among n+1 integers, two have same residue mod n","Proof of Erdős–Gallai type lemmas; existence of subset with sum divisible by n","Core"],
+  ["Combinatorial Number Theory","Erdős–Ginzburg–Ziv Theorem","Among 2n−1 integers, some n have sum divisible by n","Proof for prime n via Chevalley–Warning (conceptual); application in combinatorics","Advanced"],
+  ["Combinatorial Number Theory","Schur's Theorem","For any r-colouring of {1,…,n}, ∃ mono. solution to x+y=z","Schur numbers; relation to Ramsey theory; Rado's theorem (statement)","Extended"],
+  ["Combinatorial Number Theory","Van der Waerden","r-colour {1,…,W(r,k)}: ∃ mono. AP of length k","W(2,3)=9; connection to Szemerédi; competition use","Extended"],
+  ["Combinatorial Number Theory","Sumsets & Additive Combinatorics","A+B = {a+b}; min|A+B|=|A|+|B|−1 (Cauchy–Davenport for primes)","Cauchy–Davenport theorem; Vosper's theorem; additive energy; competition applications","Advanced"],
+  ["Combinatorial Number Theory","Beatty's Theorem","If 1/α+1/β=1, irrational α,β: ⌊nα⌋ and ⌊nβ⌋ partition ℕ","Proof; Wythoff's game; competition use in sequences","Advanced"],
+
+
+  // ── 10. SPECIAL TOPICS ──
+  ["Special Competition Topics","Last Digits & Periodicity","Finding last 1,2,3 digits of large powers; period of aⁿ mod 10","CRT to combine mod 2 and mod 5; last two digits using mod 100; Pisano period for Fibonacci","Core"],
+  ["Special Competition Topics","Number of Trailing Zeros","Zeros in n! = min(v₂(n!), v₅(n!)) = v₅(n!) = Σ⌊n/5^k⌋","Zeros in product of consecutive integers; zeros in multinomial coefficients","Core"],
+  ["Special Competition Topics","Palindromes & Digit Problems","Digits of n in base b; digit sum; digital root = n mod 9 (if ≠ 0)","Digit sum divisibility; repunits; pandigital numbers; competition digit puzzles","Core"],
+  ["Special Competition Topics","Perfect, Abundant, Deficient","σ(n) relation to 2n; even perfect numbers = 2^(p−1)(2^p−1)","Odd perfect numbers (unsolved, mention only); quasiperfect; sparsity of perfects","Advanced"],
+  ["Special Competition Topics","Multiplicative Order Applications","Decimal expansions; period of 1/p; Artin's conjecture (statement)","Long division and order; period of 1/7=6, 1/13=6; cyclic numbers","Advanced"],
+  ["Special Competition Topics","Squares, Cubes, Higher Powers","Difference of squares; consecutive squares; squares in AP","No 3 squares in GP; square pyramid sums; Waring's problem (statement)","Core"],
+  ["Special Competition Topics","Gaussian Integers (intro)","ℤ[i]; norm N(a+bi)=a²+b²; units; Gaussian primes","Unique factorisation in ℤ[i]; primes that split/ramify/remain inert; sum-of-two-squares via Gaussian","Extended"],
+  ["Special Competition Topics","p-adic Valuation","v_p(n) = exponent of p in factorisation of n; v_p(ab)=v_p(a)+v_p(b)","v_p(a+b)≥min(v_p(a),v_p(b)); ultrametric; LTE in terms of v_p; competition use","Advanced"],
+  ["Special Competition Topics","Zsygmondy's Theorem","For a>b≥1, n≥3: aⁿ−bⁿ has a prime factor not dividing aᵏ−bᵏ for k<n","Exceptions; application to showing expressions have new prime factors; Birkhoff–Vandiver","Extended"],
+  ["Special Competition Topics","Vieta Jumping","Assume integer solution (x,y), fix one and view as quadratic in other; jump to smaller solution","Markov triples; classic IMO problems; connection to Pell and recursive sequences","Advanced"],
+];
+
+
+const tbody = document.getElementById('table-body');
+const levelClass = { Core:'badge-core', Advanced:'badge-adv', Extended:'badge-ext' };
+let rows = [];
+
+
+data.forEach((row, i) => {
+  const [main, sub, subsub, deep, level] = row;
+  const shade = ['Core','Advanced','Extended'].indexOf(level);
+  const tr = document.createElement('tr');
+  tr.className = i % 2 === 0 ? 'topic-row-a' : 'topic-row-b';
+  tr.innerHTML = `
+    <td class="num-col">${i+1}</td>
+    <td><span class="main-topic">${main}</span></td>
+    <td><span class="subtopic">${sub}</span></td>
+    <td><span class="sub-sub">${subsub}</span></td>
+    <td><span class="deep">${deep}</span></td>
+    <td class="tag-col"><span class="badge ${levelClass[level]}">${level}</span></td>
+  `;
+  tr.dataset.text = `${main} ${sub} ${subsub} ${deep}`.toLowerCase();
+  tbody.appendChild(tr);
+  rows.push(tr);
+});
+
+
+function filterTable(q) {
+  const s = q.toLowerCase().trim();
+  rows.forEach(r => {
+    r.classList.toggle('hidden', s !== '' && !r.dataset.text.includes(s));
+  });
+}
+</script>
